@@ -116,9 +116,9 @@ func _parse_buffer() -> void:
 		for line in lines:
 			var trimmed_line: String = line.strip_edges()
 			if trimmed_line.begins_with("event:"):
-				event_type = trimmed_line.substring(6).strip_edges()
+				event_type = trimmed_line.substr(6).strip_edges()
 			elif trimmed_line.begins_with("data:"):
-				event_data_str = trimmed_line.substring(5).strip_edges()
+				event_data_str = trimmed_line.substr(5).strip_edges()
 
 		if not event_data_str.is_empty():
 			var json: JSON = JSON.new()
