@@ -18,25 +18,48 @@ black-mountain-dwarven-forge/
 ├── project.godot               # Godot 4 Project Configuration
 ├── icon.svg                    # Application Icon
 ├── LICENSE                     # CC BY-NC-SA 4.0 License
+├── LESSONS_LEARNED.md          # Technical Pitfalls & Godot 4 Migration Rules
 ├── README.md                   # Documentation & Architecture Overview
 ├── scenes/
 │   ├── main.tscn               # Main Scene Setup
 │   └── components/             # Reusable UI & Agent Component Scenes
-└── scripts/
-    ├── main.gd                 # Main Controller & Orchestrator
-    ├── models/
-    │   └── agent_profile.gd    # Agent Data Model & Status Tracking
-    ├── networking/
-    │   ├── gateway_api_client.gd # Async HTTP REST Client (Polling & Queries)
-    │   └── gateway_sse_client.gd # Real-time SSE Stream Reader (HTTPClient)
-    └── state/
-        ├── agent_state.gd      # Base State Class
-        ├── agent_state_machine.gd # State Machine Manager
-        └── states/             # Concrete FSM States
-            ├── idle_state.gd
-            ├── thinking_state.gd
-            ├── running_tool_state.gd
-            └── error_state.gd
+├── scripts/
+│   ├── main.gd                 # Main Controller & Orchestrator
+│   ├── models/
+│   │   └── agent_profile.gd    # Agent Data Model & Status Tracking
+│   ├── networking/
+│   │   ├── gateway_api_client.gd # Async HTTP REST Client (Polling & Queries)
+│   │   └── gateway_sse_client.gd # Real-time SSE Stream Reader (HTTPClient)
+│   └── state/
+│       ├── agent_state.gd      # Base State Class
+│       ├── agent_state_machine.gd # State Machine Manager
+│       └── states/             # Concrete FSM States
+│           ├── idle_state.gd
+│           ├── thinking_state.gd
+│           ├── running_tool_state.gd
+│           └── error_state.gd
+└── tests/                      # Headless Unit Testing Suite
+    ├── test_runner.gd          # Headless Test Runner
+    └── unit/                   # Test Suites
+        ├── test_agent_profile.gd
+        ├── test_agent_state_machine.gd
+        └── test_gateway_api_client.gd
+```
+
+---
+
+## 🧪 Headless Verification & Unit Tests
+
+### 1. Headless Syntax & Compilation Check
+To verify that GDScript files parse and compile cleanly without launching a GUI:
+```bash
+godot4 --headless --quit
+```
+
+### 2. Running Unit Tests
+To run the automated GDScript unit test suite in headless mode:
+```bash
+godot4 --headless -s tests/test_runner.gd
 ```
 
 ---
@@ -62,16 +85,3 @@ Each agent profile node is driven by `AgentStateMachine`:
 * **`ThinkingState`:** Generating response / reasoning.
 * **`RunningToolState`:** Executing a tool (e.g. terminal, browser, file I/O). Triggers forge animations & sparks.
 * **`ErrorState`:** Visual error feedback.
-
----
-
-## 🚀 Getting Started
-
-1. **Open in Godot 4:**
-   Import `project.godot` into Godot Engine (version 4.3 or 4.7.2).
-
-2. **Configure Gateway Key (Optional):**
-   Set the `API_SERVER_KEY` environment variable on your machine or configure `api_key` in the `GatewayApiClient` inspector node.
-
-3. **Run the Main Scene (`scenes/main.tscn`):**
-   Press `F5` in Godot to run the dashboard. Output logs will display connected agents, health metrics, and streaming SSE events!
